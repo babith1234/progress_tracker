@@ -1,14 +1,33 @@
 "use client";
 import axios from "axios";
 import { useState, useEffect } from "react";
+import toast from "react-hot-toast";
 
 export default function Login() {
   const [isAdmin, setAdmin] = useState(true);
   const [email_id, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const newUser = {
+      email_id: email_id,
+      password: password,
+    };
+
+    console.log(newUser);
+
+    try {
+      const response = await axios.post("/api/users/login", newUser);
+      console.log(response.data)
+      if (response.data.success === true) {
+        toast("LOGGED IN SUCCESSFULLY");
+      }
+    } catch (error) {
+      console.log("Error sending the request");
+      toast("COULDN'T LOGIN");
+    }
   };
 
   const adminClick = () => {
@@ -24,11 +43,15 @@ export default function Login() {
       <div className="flex justify-center items-center bg-white h-screen">
         <form className="w-full m-5 sm:w-96 p-6 rounded-xl shadow-black shadow-lg mb-20">
           <div className="flex justify-between">
-            <button type="button" className="p-2 rounded-xl bg-red-500 font-bold" onClick={adminClick}>
+            <button
+              type="button"
+              className="p-2 rounded-xl bg-red-500 font-bold"
+              onClick={adminClick}
+            >
               ADMIN{" "}
             </button>
             <button
-             type="button"
+              type="button"
               className="p-2 rounded-xl bg-green-500 font-bold"
               onClick={studentClick}
             >
