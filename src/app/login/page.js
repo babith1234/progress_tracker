@@ -23,12 +23,18 @@ export default function Login() {
       if (response.data.success === true) {
         toast.success("LOGGED IN SUCCESSFULLY");
       }
+      else{
+        toast.error("INVALID CREDENTIALS");
+      }
     }
     if (isAdmin==true){
       const response = await axios.post("/api/users/login/admin", newUser);
       if (response.data.success === true) {
         console.log("Admin")
         toast.success("LOGGED IN SUCCESSFULLY");
+      }
+      else{
+        toast.error("INVALID CREDENTIALS");
       }
     }
     } catch (error) {

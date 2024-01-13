@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import Admin from "@/models/adminModal";
 import dotenv from "dotenv";
 dotenv.config();
+import { getDataFromToken } from "@/helpers/getDatafromToken";
 
 connect();
 
