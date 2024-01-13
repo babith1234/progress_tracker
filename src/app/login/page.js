@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
 export default function Login() {
-  const [isAdmin, setAdmin] = useState(true);
+  const [isAdmin, setAdmin] = useState(null);
   const [email_id, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,14 +16,21 @@ export default function Login() {
       password: password,
     };
 
-    console.log(newUser);
-
     try {
-      const response = await axios.post("/api/users/login", newUser);
-      console.log(response.data)
+      if (isAdmin===false){
+      const response = await axios.post("/api/users/login/student", newUser);
+
       if (response.data.success === true) {
-        toast("LOGGED IN SUCCESSFULLY");
+        toast.success("LOGGED IN SUCCESSFULLY");
       }
+    }
+    if (isAdmin==true){
+      const response = await axios.post("/api/users/login/admin", newUser);
+      if (response.data.success === true) {
+        console.log("Admin")
+        toast.success("LOGGED IN SUCCESSFULLY");
+      }
+    }
     } catch (error) {
       console.log("Error sending the request");
       toast("COULDN'T LOGIN");
@@ -32,10 +39,12 @@ export default function Login() {
 
   const adminClick = () => {
     setAdmin(true);
+   
   };
 
   const studentClick = () => {
     setAdmin(false);
+   
   };
 
   return (
