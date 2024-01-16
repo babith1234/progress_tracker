@@ -5,7 +5,6 @@ import jwt from "jsonwebtoken";
 import Admin from "@/models/adminModal";
 import dotenv from "dotenv";
 dotenv.config();
-import { getDataFromToken } from "@/helpers/getDatafromToken";
 
 connect();
 
@@ -35,6 +34,16 @@ export async function POST(NextRequest) {
       });
     }
 
+    const userPassword = await user.password
+
+    if(userPassword!=password){
+        return NextResponse.json({
+          message:"password mismatch",
+          status:401,
+          success:false
+        })
+    }
+    
     const Payload = {
       id: user._id,
     };

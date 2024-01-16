@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
 
 export default function Login() {
-  const [isAdmin, setAdmin] = useState(null);
+  const [isAdmin, setAdmin] = useState(false);
   const [email_id, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -16,27 +16,40 @@ export default function Login() {
       password: password,
     };
 
-    try {
-      if (isAdmin===false){
-      const response = await axios.post("/api/users/login/student", newUser);
+    console.log(newUser);
 
-      if (response.data.success === true) {
-        toast.success("LOGGED IN SUCCESSFULLY");
+    try {
+      if (isAdmin === false) {
+        const response = await axios.post("/api/users/login/student", newUser);
+        if (response.data.success === true) {
+          toast("CHECK YOUR EMAIL!", {
+            icon: "👏",
+            style: {
+              borderRadius: "10px",
+              background: "#22C55E",
+              color: "#fff",
+            },
+          });
+        }
+
+        if (response.data.success === false) {
+          toast.error("INVALID CREDENTIALS",{
+            style: {
+              borderRadius: "10px",
+              background: "#EF4444",
+              color: "#fff",
+            },
+          });
+        }
       }
-      else{
-        toast.error("INVALID CREDENTIALS");
+      if (isAdmin === true) {
+        const response = await axios.post("/api/users/login/admin", newUser);
+        if (response.data.success === true) {
+          toast.success("LOGGED IN SUCCESSFULLY");
+        } else {
+          toast.error("INVALID CREDENTIALS");
+        }
       }
-    }
-    if (isAdmin==true){
-      const response = await axios.post("/api/users/login/admin", newUser);
-      if (response.data.success === true) {
-        console.log("Admin")
-        toast.success("LOGGED IN SUCCESSFULLY");
-      }
-      else{
-        toast.error("INVALID CREDENTIALS");
-      }
-    }
     } catch (error) {
       console.log("Error sending the request");
       toast("COULDN'T LOGIN");
@@ -45,12 +58,10 @@ export default function Login() {
 
   const adminClick = () => {
     setAdmin(true);
-   
   };
 
   const studentClick = () => {
     setAdmin(false);
-   
   };
 
   return (

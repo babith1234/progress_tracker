@@ -15,6 +15,8 @@ try {
       required: true,
       unique: true,
     },
+    verifyToken: String,
+    verifyTokenExpiry: Date,
   });
 
    User = mongoose.model("user", userSchema);
