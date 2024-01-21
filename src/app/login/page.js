@@ -2,11 +2,17 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+
 
 export default function Login() {
   const [isAdmin, setAdmin] = useState(false);
   const [email_id, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const router = useRouter()
+
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,6 +52,7 @@ export default function Login() {
         const response = await axios.post("/api/users/login/admin", newUser);
         if (response.data.success === true) {
           toast.success("LOGGED IN SUCCESSFULLY");
+          router.push("/studentSearch")
         } else {
           toast.error("INVALID CREDENTIALS");
         }
