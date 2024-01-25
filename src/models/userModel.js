@@ -13,8 +13,8 @@ try {
     password: {
       type: String,
       required: true,
-      unique: true,
     },
+    
     verifyToken: String,
     verifyTokenExpiry: Date,
   });

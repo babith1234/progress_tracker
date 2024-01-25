@@ -2,13 +2,17 @@
 import { useState } from "react";
 import axios from "axios";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 export default function SearchStudent() {
   const [usn, setUsn] = useState("");
   const [flag, setFlag] = useState(null);
   const [data, setData] = useState("");
 
+  const router = useRouter()
+
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
 
     const response = await axios.post("/api/studentSearch", { usn });
@@ -21,6 +25,11 @@ export default function SearchStudent() {
     }
   };
 
+  const deptExport = (dept)=>{
+    console.log(dept)
+    router.push(`/sem?dept=${dept}`)
+ 
+  }
   return (
     <>
       <div className=" h-screen bg-white flex flex-col justify-center items-center w-screen">
@@ -47,13 +56,13 @@ export default function SearchStudent() {
           <div className="mt-10 md:h-48 bg-slate-700 mx-auto flex flex-col items-center rounded-2xl justify-around md:p-20">
             <p>NAME:{data.name}</p>
             <p>USNN:{data.usn}</p>
-            <p>EMAIL:{data.email_id}</p>
+            <p>EMAIL:{data.email}</p>
             <p>DEPT:{data.dept}</p>
             <p>CLASS:{data.class}</p>
 
-            <Link href="/sem">
-            <button type="button" className="bg-green-500 p-5 rounded-full px-9">MARKS</button>
-            </Link>
+            
+            <button type="button" className="bg-green-500 p-5 rounded-full px-9"onClick={()=>deptExport(data.dept)}>MARKS</button>
+            
           </div>
         )}
       </div>

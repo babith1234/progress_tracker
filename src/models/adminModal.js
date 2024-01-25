@@ -9,7 +9,7 @@ try {
         type:String,
         required:true,
     },
-    email: {
+    email_id: {
       type: String,
       required: true,
       unique: true,

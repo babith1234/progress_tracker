@@ -15,9 +15,9 @@ export async function POST(NextRequest) {
     const reqBody = await NextRequest.json();
     console.log(reqBody)
 
-    const { email_id, password } = reqBody;
+    const { email, password } = reqBody;
 
-    if (!email_id || !password) {
+    if (!email || !password) {
       return NextResponse.json({
         message: "No data provided",
         status: 401,
@@ -25,7 +25,7 @@ export async function POST(NextRequest) {
       });
     }
 
-    const user = await User.findOne({ email_id });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return NextResponse.json({
@@ -45,7 +45,7 @@ export async function POST(NextRequest) {
         })
     }
 
-    await Email({email: email_id, userId:user._id})
+    await Email({email: email, userId:user._id})
 
     const Payload = {
       id: user._id,

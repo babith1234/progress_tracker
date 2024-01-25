@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 
 export default function Login() {
   const [isAdmin, setAdmin] = useState(false);
-  const [email_id, setEmail] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const router = useRouter()
@@ -18,7 +18,7 @@ export default function Login() {
     e.preventDefault();
 
     const newUser = {
-      email_id: email_id,
+      email: email,
       password: password,
     };
 
@@ -105,7 +105,7 @@ export default function Login() {
               placeholder="Enter your email"
               className="w-full border rounded-md bg-white border-gray-400 p-3 text-black"
               name="email_id"
-              value={email_id}
+              value={email}
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
