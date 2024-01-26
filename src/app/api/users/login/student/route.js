@@ -4,6 +4,7 @@ import jwt from "jsonwebtoken";
 import { connect } from "@/app/dbConfig/dbConfig";
 import User from "@/models/userModel";
 import dotenv from "dotenv";
+import { Email } from "@/helpers/sendEmail";
 
 dotenv.config();
 
@@ -12,10 +13,11 @@ connect();
 export async function POST(NextRequest) {
   try {
     const reqBody = await NextRequest.json();
+    console.log(reqBody)
 
-    const { email_id, password } = reqBody;
+    const { email, password } = reqBody;
 
-    if (!email_id || !password) {
+    if (!email || !password) {
       return NextResponse.json({
         message: "No data provided",
         status: 401,
@@ -23,7 +25,7 @@ export async function POST(NextRequest) {
       });
     }
 
-    const user = await User.findOne({ email_id });
+    const user = await User.findOne({ email });
 
     if (!user) {
       return NextResponse.json({
@@ -33,6 +35,18 @@ export async function POST(NextRequest) {
       });
     }
 
+    const userPassword = await user.password
+
+    if(userPassword!==password){
+        return NextResponse.json({
+          message:"password mismatch",
+          status:401,
+          success:false
+        })
+    }
+
+    await Email({email: email, userId:user._id})
+
     const Payload = {
       id: user._id,
     };
@@ -40,6 +54,8 @@ export async function POST(NextRequest) {
     const accessToken = jwt.sign(Payload, process.env.JWT_SECRET, {
       expiresIn: "1d",
     });
+
+    console.log(accessToken)
 
     const response = NextResponse.json({
       message: "Login successfull",

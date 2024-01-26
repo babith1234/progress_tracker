@@ -19,12 +19,9 @@ try {
       type: String,
       required: true,
     },
-    section: {
-      type: String,
-    },
-    class: {
-      type: String,
-    },
+    
+    verifyToken: String,
+    verifyTokenExpiry: Date,
   });
 
   User = mongoose.model("user", userSchema);

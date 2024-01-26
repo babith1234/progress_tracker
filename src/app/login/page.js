@@ -2,28 +2,58 @@
 import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
+
 
 export default function Login() {
-  const [isAdmin, setAdmin] = useState(true);
-  const [email_id, setEmail] = useState("");
+  const [isAdmin, setAdmin] = useState(false);
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter();
+
+  const router = useRouter()
+
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     const newUser = {
-      email_id: email_id,
+      email: email,
       password: password,
     };
 
     try {
-      const response = await axios.post("/api/users/login", newUser);
-      console.log(response.data)
-      if (response.data.success === true) {
-        toast("LOGGED IN SUCCESSFULLY");
-        router.push('/profile')
+      if (isAdmin === false) {
+        const response = await axios.post("/api/users/login/student", newUser);
+        if (response.data.success === true) {
+          toast("CHECK YOUR EMAIL!", {
+            icon: "👏",
+            style: {
+              borderRadius: "10px",
+              background: "#22C55E",
+              color: "#fff",
+            },
+          });
+        }
+
+        if (response.data.success === false) {
+          toast.error("INVALID CREDENTIALS",{
+            style: {
+              borderRadius: "10px",
+              background: "#EF4444",
+              color: "#fff",
+            },
+          });
+        }
+      }
+      if (isAdmin === true) {
+        const response = await axios.post("/api/users/login/admin", newUser);
+        if (response.data.success === true) {
+          toast.success("LOGGED IN SUCCESSFULLY");
+          router.push("/studentSearch")
+        } else {
+          toast.error("INVALID CREDENTIALS");
+        }
       }
     } catch (error) {
       console.error("Error sending the request", error);
@@ -63,19 +93,19 @@ export default function Login() {
           {isAdmin ? "ADMIN LOGIN" : "STUDENT LOGIN"}
         </h2>
 
-        <div className="mb-3">
-          <label className="font-monospace font-bold mb-2 flex text-white">
-            Email
-          </label>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            className="w-full border rounded-md bg-white border-gray-400 p-3 text-black"
-            name="email_id"
-            value={email_id}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
+          <div className="mb-3">
+            <label className="font-monospace font-bold mb-2 flex text-white">
+              Email
+            </label>
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="w-full border rounded-md bg-white border-gray-400 p-3 text-black"
+              name="email_id"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+          </div>
 
         <div className="mb-3">
           <label className=" mb-2 font-monospace font-bold flex  text-white">
