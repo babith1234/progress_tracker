@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 let Sem1;
 
 try {

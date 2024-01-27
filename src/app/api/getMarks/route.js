@@ -21,6 +21,7 @@ export async function POST(NextRequest) {
     console.log(sem);
 
     const id = await getDataFromToken(NextRequest);
+    console.log(id);
 
     let semData;
 
@@ -40,36 +41,35 @@ export async function POST(NextRequest) {
       case "semester5":
         semData = await Sem5.findOne({ user: id });
         break;
-
       case "semester6":
         semData = await Sem6.findOne({ user: id });
         break;
-
       case "semester7":
         semData = await Sem7.findOne({ user: id });
         break;
-
       case "semester8":
         semData = await Sem8.findOne({ user: id });
         break;
-
       default:
-        semData = null; 
+        semData = null;
         break;
     }
-      
-    if(!semData){
-        NextResponse.json({
-            message:"No data found",
-            status:"401",
-            success:false
-        })
+    if (!semData) {
+      return NextResponse.json({
+        message: "No data found",
+        status: "401",
+        success: false,
+        data: semData,
+      });
     }
+
+    console.log(semData);
+
     return NextResponse.json({
       message: "success",
       status: 201,
       success: true,
-      data: semData
+      data: semData,
     });
   } catch (error) {
     return NextResponse.json({
